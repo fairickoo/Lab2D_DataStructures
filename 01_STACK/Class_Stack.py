@@ -4,6 +4,13 @@ class stack:
             self.items=[]
         else:
             self.items=list
+    def __str__(self):
+        out=''
+        for x in self.items:
+            out+=x
+        return out
+    def __len__(self):
+        return len(self.items)
     def push (self,i):
         self.items.append(i)
     def pop(self):
