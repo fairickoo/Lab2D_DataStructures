@@ -8,7 +8,7 @@ class stack:
         out=''
         for x in self.items:
             out+=x
-        return out
+        return  str(out)
     def __len__(self):
         return len(self.items)
     def push (self,i):
@@ -26,4 +26,7 @@ class stack:
             return True
         else:
             return False
+    def top(self):
+        return self.items[0]
+
 

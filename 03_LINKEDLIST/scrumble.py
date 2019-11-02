@@ -44,7 +44,7 @@ def DeRiffle(value,word):
             word.append(word.removeIndex(x))
 
 def DeBotton(value,word):
-    for x  in range(value):
+    for x in range(value):
         word.addHead(word.removeTail())
         
         
