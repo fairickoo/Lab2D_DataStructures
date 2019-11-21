@@ -6,6 +6,7 @@ class node:
 
     def __str__(self):
         return str(self.data)
+   
     def getData(self):
         return self.data
     def getRight(self):
@@ -116,8 +117,34 @@ class BST:
             print(root,end=' ')
             return BST._path(root.left,data)
         
-    def delete_Node():
-        pass
+    def delete_Node(self,data): #14  : 18
+        BST._delete_Node(self.root,data)
+    def _delete_Node(root,data):#1=14-18 2=15-18 3=20-18 4=20-20
+        if root==None:
+            return root
+        if data>root.data:
+            root.right= BST._delete_Node(root.right,data)# 1=15-18 2=20-18 
+        elif data < root.data:
+            root.left= BST._delete_Node(root.left,data)
+        else:
+            if root.right==None and root.left==None: #case no child
+                return root==None
+            elif root.right==None:# case one child 
+                return root.left
+            elif root.left ==None: 
+                return root.right
+            else:    #case two child
+                temp = BST.findmin_node(root.right) 
+                root.data = temp.data 
+                root.right =BST._delete_Node(root.right,temp.data)
+        return root
+    def findmin_node(node):
+        cur=node
+        while (cur.left !=None):
+            cur=cur.left
+        return cur#20
+
+        
 
 
 
@@ -153,3 +180,9 @@ print('---Sideway---')
 t.printSideway()
 print('\n-------------')
 
+d=4
+print('---delete',d,'---')
+t.delete_Node(d)
+print('---after delete---')
+t.printSideway()
+print('\n-------------')

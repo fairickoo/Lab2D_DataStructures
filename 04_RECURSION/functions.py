@@ -11,20 +11,17 @@ def eat1(n):
     else:
         print(n,end=' ')
         eat1(n-1)
-
 def fac (n):
     if n==0 or n==1:
         return 1 
+
     else:
         return fac(n-1)*n
-
-
 def fib(n):
     if n==0 or n==1:
         return n
     else:
         return fib(n-1)+fib(n-2)
-
 def sum_1ToN (n):
     if n==1:
         return n
@@ -123,7 +120,7 @@ def binarySearch(lo,hi,lists,s):
     elif s>lists[mid]:
             return binarySearch(mid+1,hi,lists,s) 
     else :
-            return binarySearch(lo,mid+1,lists,s)
+            return binarySearch(lo,mid-1,lists,s)
 def move(n,A,C,B):
     if n==1:
         print (n,' ',A,C)
