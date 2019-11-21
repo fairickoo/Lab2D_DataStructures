@@ -1,27 +1,9 @@
 import cv2 
 import serial
 import time
-#import os
+import os
 
-# path 
-path_original = r'C:/out/4.bmp'
-path_crop=r'C:/image/crop/test.png'
-path_BW=r'C:/image/b-w/bw .png'
-path_RZ= r'C:/image/crop/resize/h.png'
 
-#cv2.imshow('image original', img)
-arduino = serial.Serial('COM1',115200)   
-print(arduino.name)
-arduino.write(b'r')
-arduino.write(b'm')
-arduino.write(b'l')
-arduino.write(b'c')
-"""while(True):
-    if(arduino.inWaiting()):
-        raw = arduino.readline()
-        data = raw.decode('ascii')
-        print(data)"""
-arduino.close()
 
 def Crop(x,y,h,w,path,pathsave) :
     img = cv2.imread(path, 0) 
@@ -42,8 +24,10 @@ def getValue_pixel(path):
     rows,cols = imV.shape
     for y in range(rows):
         for x in range(cols):
-            if imV[y,x]==255:
+            if imV[y,x]>=128 and imV[y,x]<=255:
                 imV[y,x]=1
+            else:
+                imV[y,x]=0
             print(imV[y,x], end = '')
         print("\t")
     
@@ -57,14 +41,14 @@ def getValue_pixel(path):
     or ( imV[0][1]==0  and imV[0][2]==0 and imV[0][3]==0 and imV[1][2]==0 and imV[1][3]==0 and imV[2][3]==0 and imV[1][1]==1) 
     or (imV[0][2]==0 and imV[0][3]==0 and imV[1][3]==0 and imV[1][2]==1)):
         print('upper')
-    elif ((imV[0][0]==0 and imV[1][0]==0 and imV[2][0]==0 and imV[3][0]==0 )
+    elif ((imV[0][0]==0 and imV[1][0]==0 and imV[2][0]==0 and imV[3][0]==0 and imV[0][1]==1 )
     or (imV[0][0]==0 and imV[1][0]==0 and imV[2][0]==0 and imV[3][0]==0 
     and imV[0][1]==0 and imV[1][1]==0 and imV[2][1]==0 and imV[3][1]==0 ) 
     or (imV[1][0]==0 and imV[2][0]==0 and imV[3][0]==0 )) :
         print('left')
     elif ((imV[0][2]==0 and imV[1][2]==0 and imV[2][2]==0 and imV[3][2]==0 
     and imV[0][3]==0 and imV[1][3]==0 and imV[2][3]==0 and imV[3][3]==0  )
-    or (imV[0][3]==0 and imV[1][3]==0 and imV[2][3]==0 and imV[3][3]==0) 
+    or (imV[0][3]==0 and imV[1][3]==0 and imV[2][3]==0 and imV[3][3]==0 and imV[0][2]==1) 
     or (imV[1][3]==0 and imV[2][3]==0 and imV[3][3]==0 )) :
         print('right')
     elif ((imV[0][0]==0 and imV[0][1]==0 and imV[0][2]==0 and imV[0][3]==0 
@@ -74,7 +58,8 @@ def getValue_pixel(path):
     elif ((imV[2][0]==0 and imV[2][1]==0 and imV[2][2]==0 and imV[2][3]==0 
     and imV[3][0]==0 and imV[3][1]==0 and imV[3][2]==0 and imV[3][3]==0 )
     or (imV[3][0]==0 and imV[3][1]==0 and imV[3][2]==0 and imV[3][3]==0)): 
-        print('bottom')    
+        print('bottom') 
+
     print('W H :',p)
     #cv2.imshow('Imagefor get value =',imgV)
 
@@ -89,16 +74,40 @@ def Resize(path,pathsave):
     #cv2.imshow("Show by CV2",newimg)
     cv2.imwrite(pathsave, newimg)
 
+def Pule():
+    while(1): pass
 
+def TakePicAll(comservo,comcam):
+    while(True):
+        if(comservo.inWaiting()):
+            raw = comservo.read()
+            data = raw.decode('ascii')
+            print('Com name :',comservo.name)
+            print('Status arduino :',data)
+            print('\n-------------')
+            if data== 'R':
+                comservo.write(b'm')
+    Pule()
+    arduino_servo.close()
 #-------------------------------------------------------------
 #main 
+path_original = r'C:/out/10.bmp'
+path_crop=r'C:/image/crop/test.png'
+path_BW=r'C:/image/b-w/bw .png'
+path_RZ= r'C:/image/crop/resize/h.png'
+
+# python control arduino
+arduino_servo = serial.Serial('COM10',115200)  
+cam = serial.Serial('COM1',115200)  
+
 x=60
 y=80
 h=160
 w=160
-Black_White(path_original,path_BW)
-Crop(x,y,h,w,path_BW,path_crop)
+TakePicAll(arduino_servo,cam)
+Crop(x,y,h,w,path_original,path_crop)
 Resize(path_crop,path_RZ)
-getValue_pixel(path_RZ)
+Black_White(path_RZ,path_BW)
+getValue_pixel(path_BW)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
