@@ -20,6 +20,7 @@ def Black_White(path,pathsaveBW):
     cv2.imwrite(pathsaveBW, img_binary)
 
 def getValue_pixel(path):
+    count=0
     imV = cv2.imread(path, 0) 
     p = imV.shape
     rows,cols = imV.shape
@@ -36,33 +37,46 @@ def getValue_pixel(path):
     and imV[2][0]==0 and imV[2][1]==0 and imV[3][0]==0 and imV[3][1]==0 and imV[3][2]==0 ) 
     or ( imV[1][0]==0  and imV[2][0]==0 and imV[2][1]==0 and imV[3][0]==0 and imV[3][1]==0 and imV[3][2]==0 and imV[2][2]==1 ) 
     or (imV[2][0]==0 and imV[3][1]==0 and imV[3][0]==0 and imV[2][1]==1)):
+        count+=1
         print('lower')
     elif ((imV[0][0]==0 and imV[1][1]==0 and imV[2][2]==0 and imV[3][3]==0 and imV[0][1]==0 
     and imV[0][2]==0 and imV[0][3]==0 and imV[1][2]==0 and imV[1][3]==0 and imV[2][3]==0 ) 
     or ( imV[0][1]==0  and imV[0][2]==0 and imV[0][3]==0 and imV[1][2]==0 and imV[1][3]==0 and imV[2][3]==0 and imV[1][1]==1) 
     or (imV[0][2]==0 and imV[0][3]==0 and imV[1][3]==0 and imV[1][2]==1)):
+        count+=1
         print('upper')
     elif ((imV[0][0]==0 and imV[1][0]==0 and imV[2][0]==0 and imV[3][0]==0 and imV[0][1]==1 )
     or (imV[0][0]==0 and imV[1][0]==0 and imV[2][0]==0 and imV[3][0]==0 
     and imV[0][1]==0 and imV[1][1]==0 and imV[2][1]==0 and imV[3][1]==0 ) 
     or (imV[1][0]==0 and imV[2][0]==0 and imV[3][0]==0 )) :
+        count+=1
         print('left')
     elif ((imV[0][2]==0 and imV[1][2]==0 and imV[2][2]==0 and imV[3][2]==0 
     and imV[0][3]==0 and imV[1][3]==0 and imV[2][3]==0 and imV[3][3]==0  )
     or (imV[0][3]==0 and imV[1][3]==0 and imV[2][3]==0 and imV[3][3]==0 and imV[0][2]==1) 
     or (imV[1][3]==0 and imV[2][3]==0 and imV[3][3]==0 )) :
+        count+=1
         print('right')
     elif ((imV[0][0]==0 and imV[0][1]==0 and imV[0][2]==0 and imV[0][3]==0 
     and imV[1][0]==0 and imV[1][1]==0 and imV[1][2]==0 and imV[1][3]==0 )
     or (imV[0][0]==0 and imV[0][1]==0 and imV[0][2]==0 and imV[0][3]==0)): 
+        count+=1
         print('top')
     elif ((imV[2][0]==0 and imV[2][1]==0 and imV[2][2]==0 and imV[2][3]==0 
     and imV[3][0]==0 and imV[3][1]==0 and imV[3][2]==0 and imV[3][3]==0 )
     or (imV[3][0]==0 and imV[3][1]==0 and imV[3][2]==0 and imV[3][3]==0)): 
+        count+=1
         print('bottom') 
     else:
         print('error') 
-    print('W H :',p)
+        print('------------------------')
+        print('new pic')
+        path_original = r'C:/out/2.png'
+        Crop(x,y,h,w,path_original,path_crop)
+        Resize(path_crop,path_RZ)
+        Black_White(path_RZ,path_BW)
+        getValue_pixel(path_BW)
+    #print('W H :',p)
     #cv2.imshow('Imagefor get value =',imgV)
 
 def Resize(path,pathsave):
@@ -96,7 +110,7 @@ def TakeBegin(comservo,comcam):
     arduino_servo.close()
 #-------------------------------------------------------------
 #main 
-path_original = r'C:/out/10.bmp'
+path_original = r'C:/out/0.bmp'
 path_crop=r'C:/image/crop/test.png'
 path_BW=r'C:/image/b-w/bw .png'
 path_RZ= r'C:/image/crop/resize/h.png'
@@ -104,7 +118,6 @@ path_cam=r'C:/Program Files (x86)/Java/jdk1.8.0_74/bin'
 # python control arduino
 #arduino_servo = serial.Serial('COM10',115200)  
 #cam = serial.Serial('COM1',115200)  
-
 x=60
 y=80
 h=160
@@ -114,7 +127,8 @@ Crop(x,y,h,w,path_original,path_crop)
 Resize(path_crop,path_RZ)
 Black_White(path_RZ,path_BW)
 getValue_pixel(path_BW)
+
 cv2.waitKey(0)
 cv2.destroyAllWindows()
-TakePic()
+#TakePic()
 
