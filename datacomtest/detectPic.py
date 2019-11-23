@@ -145,9 +145,6 @@ def Pule():
     while(1): pass
 
 
-
-
-    
 def TakeBegin(comservo):
     lists=[]
     path_original = r'C:/out/Pic.bmp'
