@@ -328,9 +328,6 @@ def TakeBegin(comservo):
                                 break
                         print('lists : ',lists)
 
-                        
-
-
     Pule()
     comservo.close()
 #-------------------------------------------------------------
@@ -349,7 +346,5 @@ path_RZ= r'C:/image/crop/resize/h.png'
 Crop(x,y,h,w,path_original,path_crop)
 Resize(path_crop,path_RZ)
 Black_White(path_RZ,path_BW)"""
-
-
 cv2.waitKey(0)
 cv2.destroyAllWindows()
