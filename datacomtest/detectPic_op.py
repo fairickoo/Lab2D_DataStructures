@@ -140,7 +140,7 @@ def getValue_pixel(path):
 #control Arduino and take photo
 def Pule():
     while(1): pass
-def ReadPicture(lists_pic):
+def ReadPicture(lists_pic,comservo):
     print('* status picture')
     path_original = r'C:/out/Pic.bmp'
     path_crop     = r'C:/image/crop/crop.png'
@@ -153,26 +153,32 @@ def ReadPicture(lists_pic):
             print('\tRead new picture')
             Repicture(path_original,path_crop,path_BW,path_RZ)
         elif tempgetV=="Lower":
-            lists_pic.append('O')
+            lists_pic.append("5")
+            comservo.write(b'5')
             break
         elif tempgetV=="Upper":
-            lists_pic.append('U')
+            lists_pic.append("4")
+            comservo.write(b'4')
             break
         elif tempgetV=="Left":
-            lists_pic.append('L')
+            lists_pic.append("2")
+            comservo.write(b'2')
             break
         elif tempgetV=="Right":
-            lists_pic.append('R')
+            lists_pic.append("3")
+            comservo.write(b'3')
             break
         elif tempgetV=="Top":
-            lists_pic.append('T')
+            lists_pic.append("0")
+            comservo.write(b'0')
             break
         elif tempgetV=="Buttom":
-            lists_pic.append('B')
+            lists_pic.append("1")
+            comservo.write(b'1')
             break
         else:
             break
-    return lists_pic        
+    return lists_pic         
 def TakeBegin(comservo):
     lists_pic=[]
     path_original = r'C:/out/Pic.bmp'
@@ -184,7 +190,7 @@ def TakeBegin(comservo):
         if(comservo.inWaiting()):
             raw = comservo.read()
             data = raw.decode('ascii')
-            print('\n---------------------')
+            print('---------------------')
             print('Com name       :',comservo.name)
             print('Status arduino :',data)
             print('---------------------')
@@ -200,11 +206,12 @@ def TakeBegin(comservo):
                 print('\n==start camera ==')
                 print('statas  : 0 radius')
                 os.remove(path_original)
-                time.sleep(7)
+                time.sleep(8)
                 Repicture(path_original,path_crop,path_BW,path_RZ)
                 print('* Repicture finish')
-                ReadPicture(lists_pic)
+                ReadPicture(lists_pic,comservo)
                 print('Read finish > Temp Picture : ',lists_pic)
+                #comservo.write(lists_pic[0])
                 if len(lists_pic)==1:
                     print('\nServo move Miduim >')
                     comservo.write(b'm')
@@ -219,8 +226,9 @@ def TakeBegin(comservo):
                     time.sleep(7)
                     Repicture(path_original,path_crop,path_BW,path_RZ)
                     print('* Repicture finish')
-                    ReadPicture(lists_pic)
+                    ReadPicture(lists_pic,comservo)
                     print('Read finish > Temp Picture : ',lists_pic)
+                    #comservo.write(lists_pic[1])
                     if len(lists_pic)==2:
                         print('\nServo move Left >')
                         comservo.write(b'l')
@@ -235,8 +243,9 @@ def TakeBegin(comservo):
                         time.sleep(7)
                         Repicture(path_original,path_crop,path_BW,path_RZ)
                         print('* Repicture finish')
-                        ReadPicture(lists_pic)
+                        ReadPicture(lists_pic,comservo)
                         print('Read finish > Temp Picture : ',lists_pic)
+                        #comservo.write(lists_pic[2])
                         print('------------------------')
                         if len(lists_pic)==3:
                             print('\nComplete ! >')
@@ -251,5 +260,5 @@ def TakeBegin(comservo):
     
 #----------------------------------------------------------------
 #main 
-arduino_servo = serial.Serial('COM10',115200)  
-TakeBegin(arduino_servo)
+arduino_servo = serial.Serial('COM17',115200)  
+check= TakeBegin(arduino_servo)

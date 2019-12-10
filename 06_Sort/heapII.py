@@ -107,16 +107,16 @@ def deleteMin(h,last):
 
 
 
-n11=node(31)
+n11=node(14)
 n10=node(32,n11)
 n9=node(26,n10)
 n8=node(65,n9)            
 n7=node(68,n8)
 n6=node(19,n7)
-n5=node(21,n6)
+n5=node(31,n6)
 n4=node(24,n5)
 n3=node(16,n4)
-n2=node(12,n3)
+n2=node(21,n3)
 n1=node(13,n2)
 w=linkedlist()
 w.append(n1)
